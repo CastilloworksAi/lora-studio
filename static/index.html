@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LoRA Studio</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand__mark">LS</span>
+        <div>
+          <h1>LoRA Studio</h1>
+          <p>Dataset preparation and training setup</p>
+        </div>
+      </div>
+      <div class="model"><span class="dot"></span> llama3.2-vision:11b local</div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar">
+        <button class="button button--primary" id="newProjectButton">+ New subject</button>
+        <nav id="projectList" class="projects" aria-label="Projects"></nav>
+      </aside>
+
+      <section class="content">
+        <div id="emptyState" class="empty">
+          <h2>Create a subject project</h2>
+          <p>Choose a simple trigger word, add images, review captions, then export a ready training workflow.</p>
+          <button class="button button--primary" id="emptyNewButton">Create project</button>
+        </div>
+
+        <div id="projectView" class="hidden">
+          <div class="projectHead">
+            <div>
+              <p class="eyebrow">Subject Project</p>
+              <h2 id="projectTitle"></h2>
+            </div>
+            <div class="token" title="Use this token in prompts after training">
+              Trigger word <strong id="projectToken"></strong>
+            </div>
+          </div>
+
+          <div class="steps" aria-label="Workflow steps">
+            <div class="step active"><b>1</b> Add images</div>
+            <div class="step"><b>2</b> Caption</div>
+            <div class="step"><b>3</b> Review</div>
+            <div class="step"><b>4</b> Export</div>
+          </div>
+
+          <label class="dropzone" id="dropzone">
+            <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" multiple />
+            <span class="dropzone__title">Drop your images here</span>
+            <span class="dropzone__sub">or click to browse - JPG, PNG, WEBP</span>
+          </label>
+
+          <div class="toolbar">
+            <span id="countLabel">0 images</span>
+            <div class="toolbar__actions">
+              <button class="button" id="captionAllButton" disabled>Analyze all images</button>
+              <button class="button button--primary" id="exportButton" disabled>Export for training</button>
+            </div>
+          </div>
+
+          <div id="status" class="status hidden" role="status"></div>
+          <section id="imageGrid" class="grid"></section>
+
+          <section id="exportPanel" class="export hidden">
+            <h3>Ready for ComfyUI</h3>
+            <dl>
+              <dt>Dataset folder</dt><dd id="datasetPath"></dd>
+              <dt>Training workflow</dt><dd id="workflowPath"></dd>
+              <dt>Trained LoRA output</dt><dd id="outputPath"></dd>
+            </dl>
+            <p>Open ComfyUI, load the generated workflow shown above, then press Queue when you are ready to begin training.</p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="newProjectDialog">
+      <form method="dialog" id="newProjectForm">
+        <h2>New subject</h2>
+        <label>
+          Subject name
+          <input name="name" required placeholder="Example: portrait-style-01" autocomplete="off" />
+        </label>
+        <label>
+          Unique trigger word
+          <input name="trigger_word" required placeholder="Example: jcstyle01" autocomplete="off" />
+        </label>
+        <p class="hint">Use an unusual word. You will type it in prompts to activate the trained LoRA.</p>
+        <div class="dialogActions">
+          <button class="button" type="button" id="cancelButton">Cancel</button>
+          <button class="button button--primary" type="submit">Create</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
